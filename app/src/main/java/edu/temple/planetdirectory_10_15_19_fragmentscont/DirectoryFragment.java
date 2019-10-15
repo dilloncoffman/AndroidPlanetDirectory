@@ -29,11 +29,6 @@ public class DirectoryFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public DirectoryFragment(String[] planets) {
-        this.planets = planets;
-    }
-
-
     // View is inflated
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
