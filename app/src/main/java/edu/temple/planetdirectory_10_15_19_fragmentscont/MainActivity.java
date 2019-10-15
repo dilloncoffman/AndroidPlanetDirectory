@@ -15,6 +15,15 @@ public class MainActivity extends AppCompatActivity implements DirectoryFragment
         // When you set the argument of a fragment, before you attach it to an Activity,
         // Android keeps track of your arguments
         DirectoryFragment directoryFragment = new DirectoryFragment();
+
+        // put all info a fragment needs in a bundle
+        Bundle bundle = new Bundle();
+        // never use a hard-coded string as a key, preferably use a final String reference, for our purposes hard-coding is a shortcut
+        bundle.putStringArray("planets", getResources().getStringArray(R.array.planets));
+        // set arguments for fragment using bundle
+        directoryFragment.setArguments(bundle);
+        // add a container for your fragment
+        getSupportFragmentManager().beginTransaction().add(R.id.container_1, directoryFragment).commit();
     }
 
     @Override

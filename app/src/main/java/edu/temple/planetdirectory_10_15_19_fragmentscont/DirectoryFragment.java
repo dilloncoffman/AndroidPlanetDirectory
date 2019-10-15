@@ -1,7 +1,6 @@
 package edu.temple.planetdirectory_10_15_19_fragmentscont;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -47,8 +46,6 @@ public class DirectoryFragment extends Fragment {
                 fragmentParent.planetSelected(parent.getItemAtPosition(position).toString()); // use toString() since you know you'll get the value you expect instead of a memory location
             }
         });
-
-g
 
         // return listView for this fragment's layout - this view needs an adapter, can just use an ArrayAdapter
         return listView;
