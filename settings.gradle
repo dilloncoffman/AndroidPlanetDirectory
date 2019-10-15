@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name='PlanetDirectory_10_15_19_FragmentsCont'
