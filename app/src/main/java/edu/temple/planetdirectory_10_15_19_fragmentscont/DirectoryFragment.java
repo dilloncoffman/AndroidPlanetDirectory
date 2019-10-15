@@ -22,11 +22,30 @@ public class DirectoryFragment extends Fragment {
 
     String[] planets;
 
+    public final static String PLANET_KEY = "planets";
+
     private PlanetSelectedInterface fragmentParent;
 
     // Android needs to create and destroy elements at runtime
     public DirectoryFragment() {
         // Required empty public constructor
+    }
+    // static because it belongs to the class, not to any object; with return type being the class type; method in the class that will return instances of this class
+    // factory method that takes set of argument to create the objects
+    public static DirectoryFragment newInstance(String[] planets) {
+        // how do we provide our fragment with information it can use at the time it's created?
+        // A fragment has a special property called an argument, it's hidden but it's always there
+        // When you set the argument of a fragment, before you attach it to an Activity,
+        // Android keeps track of your arguments
+        DirectoryFragment directoryFragment = new DirectoryFragment();
+        // put all info a fragment needs in a bundle
+        Bundle bundle = new Bundle();
+        // never use a hard-coded string as a key, preferably use a final String reference, for our purposes hard-coding is a shortcut
+        bundle.putStringArray(PLANET_KEY, planets);
+        // set arguments for fragment using bundle
+        directoryFragment.setArguments(bundle);
+        // returns directoryFragment since this is a factory method, now when Activity needs an instance of DirectoryFragment, it will use this
+        return directoryFragment;
     }
 
     @Override
@@ -36,7 +55,7 @@ public class DirectoryFragment extends Fragment {
         Bundle bundle = getArguments(); // fragment calls getArguments to access information passed by bundle in Activity
         if (bundle != null) {
             // assume values were provided in bundle
-            planets = bundle.getStringArray("planets"); // once again, use a final constant for your key value ideally
+            planets = bundle.getStringArray(PLANET_KEY); // once again, use a final constant for your key value ideally
         }
     }
 
