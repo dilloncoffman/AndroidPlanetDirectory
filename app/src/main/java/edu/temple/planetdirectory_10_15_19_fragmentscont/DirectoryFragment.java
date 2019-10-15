@@ -2,6 +2,7 @@ package edu.temple.planetdirectory_10_15_19_fragmentscont;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,17 @@ public class DirectoryFragment extends Fragment {
     // Android needs to create and destroy elements at runtime
     public DirectoryFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle bundle = getArguments(); // fragment calls getArguments to access information passed by bundle in Activity
+        if (bundle != null) {
+            // assume values were provided in bundle
+            planets = bundle.getStringArray("planets"); // once again, use a final constant for your key value ideally
+        }
     }
 
     // View is inflated
