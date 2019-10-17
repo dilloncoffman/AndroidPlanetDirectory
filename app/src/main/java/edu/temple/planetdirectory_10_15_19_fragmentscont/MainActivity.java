@@ -53,6 +53,25 @@ public class MainActivity extends AppCompatActivity implements DirectoryFragment
         } else {
             planetResource = R.drawable.mars;
         }
-        displayFragment.displayPlanet(planetResource);
+
+        if (singlePane) {
+            // Add DisplayFragment where current DirectoryFragment is, operation to execute this is asynchronous; this causes our app to crash - recall the Fragment's lifecycle, until it executes the way it should, certain things aren't available to you;
+            // When we call displayPlanet below then this Fragment Transaction has NOT completed so our app crashes, imageView will be NULL in DisplayFragment
+
+            // To Fix
+            // 1. Bundle
+            Bundle bundle = new Bundle();
+            bundle.putInt(DisplayFragment.PLANET_KEY, planetResource);
+            // 2.
+            displayFragment.setArguments(bundle);
+            // By now you've provided the fragment with the info that it needs
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .addToBackStack(null)
+                    .replace(R.id.container_1, displayFragment)
+                    .commit();
+        } else {
+            displayFragment.displayPlanet(planetResource); // only gets called in landscape mode
+        }
     }
 }
