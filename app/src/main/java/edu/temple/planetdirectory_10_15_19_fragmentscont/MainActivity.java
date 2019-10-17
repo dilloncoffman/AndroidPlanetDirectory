@@ -8,10 +8,15 @@ public class MainActivity extends AppCompatActivity implements DirectoryFragment
     DisplayFragment displayFragment;
     String[] planets;
 
+    boolean singlePane;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Know which layout you're in
+        singlePane = (findViewById(R.id.container_2) == null); // if there is no container_2 (only on landscape), then there's only one container
 
         planets = getResources().getStringArray(R.array.planets); // have a reference to your planets resources, the Activity now has this object to use as well
         displayFragment = new DisplayFragment(); // old way of creating fragment, doesn't mean we need new way
@@ -22,20 +27,31 @@ public class MainActivity extends AppCompatActivity implements DirectoryFragment
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.container_1, directoryFragment)
-                .add(R.id.container_2, displayFragment)
                 .commit();
+
+        if (!singlePane) {
+            // then you're in double pane, landscape mode, add fragment in container_2
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.container_2, displayFragment)
+                    .commit();
+        }
     }
 
     @Override
     public void planetSelected(int position) {
         // callback the fragment will invoke with the planetName, call on an instance of a DisplayFragment and tell it which image to display
         int planetResource;
-        if (position == 2) {
-            planetResource = R.drawable.mars;
-        } else if (position == 1) {
+        if (position == 0) {
             planetResource = R.drawable.pluto;
-        } else {
+        } else if (position == 1) {
             planetResource = R.drawable.neptune;
+        } else if (position == 2) {
+            planetResource = R.drawable.jupiter;
+        } else if (position == 3) {
+            planetResource = R.drawable.saturn;
+        } else {
+            planetResource = R.drawable.mars;
         }
         displayFragment.displayPlanet(planetResource);
     }
