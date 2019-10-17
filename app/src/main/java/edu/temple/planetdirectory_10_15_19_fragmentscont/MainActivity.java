@@ -1,5 +1,6 @@
 package edu.temple.planetdirectory_10_15_19_fragmentscont;
 
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -19,22 +20,31 @@ public class MainActivity extends AppCompatActivity implements DirectoryFragment
         singlePane = (findViewById(R.id.container_2) == null); // if there is no container_2 (only on landscape), then there's only one container
 
         planets = getResources().getStringArray(R.array.planets); // have a reference to your planets resources, the Activity now has this object to use as well
-        displayFragment = new DisplayFragment(); // old way of creating fragment, doesn't mean we need new way
 
         // Now Activity just asks Fragment class to give it an instance, it doesn't know how Fragment is created
         DirectoryFragment directoryFragment = DirectoryFragment.newInstance(planets); // new way to create a fragment
-        // add a container for your fragment
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.container_1, directoryFragment)
-                .commit();
 
-        if (!singlePane) {
-            // then you're in double pane, landscape mode, add fragment in container_2
+
+        Fragment container1Fragment = getSupportFragmentManager().findFragmentById(R.id.container_1);
+        // check if a Fragment is already there, is this the result of a restart or something else; skips recreating one if it's already there
+        if (container1Fragment == null) {
+            // create a new fragment and add it
+            displayFragment = new DisplayFragment(); // old way of creating fragment, doesn't mean we need new way
+            // add a container for your fragment
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.container_2, displayFragment)
+                    .add(R.id.container_1, directoryFragment)
                     .commit();
+        } else { // if there is something already there
+            // figure out what is already there
+            if (container1Fragment instanceof DirectoryFragment) { // grab instance of DirectoryFragment
+                directoryFragment = (DirectoryFragment) container1Fragment;
+            } else { // if it's not a directory fragment, it's a DisplayFragment so detach it
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .detach(container1Fragment)
+                        .commit();
+            }
         }
     }
 
@@ -54,24 +64,25 @@ public class MainActivity extends AppCompatActivity implements DirectoryFragment
             planetResource = R.drawable.mars;
         }
 
+        displayFragment = new DisplayFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(DisplayFragment.PLANET_KEY, planetResource);
+        displayFragment.setArguments(bundle);
+
         if (singlePane) {
             // Add DisplayFragment where current DirectoryFragment is, operation to execute this is asynchronous; this causes our app to crash - recall the Fragment's lifecycle, until it executes the way it should, certain things aren't available to you;
             // When we call displayPlanet below then this Fragment Transaction has NOT completed so our app crashes, imageView will be NULL in DisplayFragment
-
-            // To Fix
-            // 1. Bundle
-            Bundle bundle = new Bundle();
-            bundle.putInt(DisplayFragment.PLANET_KEY, planetResource);
-            // 2.
-            displayFragment.setArguments(bundle);
             // By now you've provided the fragment with the info that it needs
             getSupportFragmentManager()
                     .beginTransaction()
-                    .addToBackStack(null)
+                    .addToBackStack(null) // allows us to hit back arrow and go back to last DirectoryFragment rather than going back to home screen and closing the app
                     .replace(R.id.container_1, displayFragment)
                     .commit();
         } else {
-            displayFragment.displayPlanet(planetResource); // only gets called in landscape mode
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container_2, displayFragment)
+                    .commit();
         }
     }
 }
