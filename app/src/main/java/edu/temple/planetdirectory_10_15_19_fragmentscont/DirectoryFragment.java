@@ -20,7 +20,7 @@ import android.widget.ListView;
  */
 public class DirectoryFragment extends Fragment {
 
-    String[] planets;
+    Object[] planets;
 
     public final static String PLANET_KEY = "planets";
 
@@ -74,7 +74,7 @@ public class DirectoryFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // whenever you click an element, tell the fragment's parent a certain planet was selected
-                fragmentParent.planetSelected(parent.getItemAtPosition(position).toString()); // use toString() since you know you'll get the value you expect instead of a memory location
+                fragmentParent.planetSelected(position); // instead of passing String of name of planet, we changed the interface
             }
         });
 
@@ -110,6 +110,6 @@ public class DirectoryFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface PlanetSelectedInterface {
-        void planetSelected(String planetName);
+        void planetSelected(int position); // pass index of selected item, will pass the index of what was selected instead of passing String for planet name, the position is the bare minimum you need to give to Activity
     }
 }

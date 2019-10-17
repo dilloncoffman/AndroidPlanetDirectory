@@ -30,24 +30,8 @@ public class DisplayFragment extends Fragment {
     }
 
     // public method for Activity to talk to fragment
-    public void displayPlanet(String planetName) {
-        switch (planetName) {
-            case "Saturn":
-                imageView.setImageResource(R.drawable.saturn);
-                break;
-            case "Pluto":
-                imageView.setImageResource(R.drawable.pluto);
-                break;
-            case "Neptune":
-                imageView.setImageResource(R.drawable.neptune);
-                break;
-            case "Jupiter":
-                imageView.setImageResource(R.drawable.jupiter);
-                break;
-            case "Mars":
-                imageView.setImageResource(R.drawable.mars);
-                break;
-        }
+    public void displayPlanet(int planetResource) {
+        imageView.setImageResource(planetResource);
     }
 
 }
