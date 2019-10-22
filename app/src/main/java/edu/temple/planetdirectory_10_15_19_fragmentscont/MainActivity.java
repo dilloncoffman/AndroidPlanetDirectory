@@ -21,30 +21,19 @@ public class MainActivity extends AppCompatActivity implements DirectoryFragment
 
         planets = getResources().getStringArray(R.array.planets); // have a reference to your planets resources, the Activity now has this object to use as well
 
-        // Now Activity just asks Fragment class to give it an instance, it doesn't know how Fragment is created
-        DirectoryFragment directoryFragment = DirectoryFragment.newInstance(planets); // new way to create a fragment
-
-
+        DirectoryFragment directoryFragment;
         Fragment container1Fragment = getSupportFragmentManager().findFragmentById(R.id.container_1);
         // check if a Fragment is already there, is this the result of a restart or something else; skips recreating one if it's already there
         if (container1Fragment == null) {
-            // create a new fragment and add it
-            displayFragment = new DisplayFragment(); // old way of creating fragment, doesn't mean we need new way
+            // Now Activity just asks Fragment class to give it an instance, it doesn't know how Fragment is created
             // add a container for your fragment
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.container_1, directoryFragment)
+                    .add(R.id.container_1, DirectoryFragment.newInstance(planets))
                     .commit();
-        } else { // if there is something already there
-            // figure out what is already there
-            if (container1Fragment instanceof DirectoryFragment) { // grab instance of DirectoryFragment
-                directoryFragment = (DirectoryFragment) container1Fragment;
-            } else { // if it's not a directory fragment, it's a DisplayFragment so detach it
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .detach(container1Fragment)
-                        .commit();
-            }
+        } else if (container1Fragment instanceof DisplayFragment) { // grab instance of DirectoryFragment
+            // pop it off stack if it is a DisplayFragment so it doesn't show over planet list
+            getSupportFragmentManager().popBackStack();
         }
     }
 
