@@ -23,6 +23,16 @@ public class DisplayFragment extends Fragment {
         // Required empty public constructor
     }
 
+    // factory method to quickly create DisplayFragments
+    public static DisplayFragment newInstance(int planetResource) {
+        DisplayFragment fragment = new DisplayFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(PLANET_KEY, planetResource);
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
