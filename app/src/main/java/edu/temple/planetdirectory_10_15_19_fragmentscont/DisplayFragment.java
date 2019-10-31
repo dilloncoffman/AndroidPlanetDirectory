@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,7 +59,7 @@ public class DisplayFragment extends Fragment {
 
     // public method for Activity to talk to fragment
     public void displayPlanet(int planetResource) {
-        imageView.setImageResource(planetResource);
+        Picasso.get().load(planetResource).into(imageView);
     }
 
 }
